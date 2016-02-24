@@ -11,7 +11,7 @@
 #include <time.h>
 #include <termios.h>
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 #define HEIGHT 20
 #define WIDTH 40
 #define EMPTY 0
