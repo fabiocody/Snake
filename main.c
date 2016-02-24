@@ -11,7 +11,7 @@
 #include <time.h>
 #include <termios.h>
 
-#define VERSION "1.0.2"
+#define VERSION "1.1.0"
 #define HEIGHT 20
 #define WIDTH 40
 #define EMPTY 0
@@ -27,7 +27,7 @@ int grid[HEIGHT][WIDTH];
 /*** HEADERS ***/
 void clearScreen();
 void splashScreen();
-void printGrid(int score);
+void printGrid(int score, int record);
 void generateFood();
 unsigned int turnSnake(char direction, unsigned int end, unsigned int *foodFlag);
 
@@ -40,9 +40,15 @@ int main(int argc, const char *argv[]) {
     unsigned int end = 0;
     unsigned int foodFlag = 0;
     unsigned int length = 1;
-    int score = -1;
+    int score = -1, record = 0;
     char direction;
     static struct termios oldt, newt;       // Structs to get all the keystrokes directly to stdin
+    
+    FILE *recordFile = fopen("snake_record.bin", "r+b");
+    if (recordFile != NULL)
+        fread(&record, sizeof(int), 1, recordFile);
+    fclose(recordFile);
+    recordFile = NULL;
     
     srand((unsigned int)time(NULL));
     
@@ -69,7 +75,7 @@ int main(int argc, const char *argv[]) {
             score++;
         }
         clearScreen();
-        printGrid(score);
+        printGrid(score, record);
         do {
             direction = getchar();
         } while (direction != 'w' && direction != 'a' && direction != 's' && direction != 'd' && direction != 'q');
@@ -78,8 +84,15 @@ int main(int argc, const char *argv[]) {
             exit(EXIT_SUCCESS);
         }
         end = turnSnake(direction, end, &foodFlag);
-        if (end == 1)
-            printf("\n\nGAME OVER!\n\n");
+    }
+
+    puts("\n\nGAME OVER!\n");
+    
+    if (score > record) {
+        recordFile = fopen("snake_record.bin", "wb");
+        if (recordFile != NULL)
+            fwrite(&score, sizeof(int), 1, recordFile);
+        fclose(recordFile);
     }
     
     // Restore normal mode
@@ -108,7 +121,7 @@ void splashScreen() {
 }
 
 
-void printGrid(int score) {
+void printGrid(int score, int record) {
     unsigned int i, j;
     fflush(stdout);
     for (i = 0; i < WIDTH + 2; i++)
@@ -126,7 +139,10 @@ void printGrid(int score) {
             else if (grid[i][j] > 1)
                 printf("%c", '*');
         }
-        printf("%s", "|\n");
+        if (i == 0)
+            printf("|        Record: %d\n", record);
+        else
+            printf("%s", "|\n");
     }
     for (i = 0; i < WIDTH + 2; i++)
         printf("%c", '-');
