@@ -72,7 +72,11 @@ int main(int argc, const char *argv[]) {
         printGrid(score);
         do {
             direction = getchar();
-        } while (direction != 'w' && direction != 'a' && direction != 's' && direction != 'd');
+        } while (direction != 'w' && direction != 'a' && direction != 's' && direction != 'd' && direction != 'q');
+        if (direction == 'q') {
+            puts("\n\nEXIT\n");
+            exit(EXIT_SUCCESS);
+        }
         end = turnSnake(direction, end, &foodFlag);
         if (end == 1)
             printf("\n\nGAME OVER!\n\n");
@@ -95,7 +99,8 @@ void clearScreen() {
 
 void splashScreen() {
     clearScreen();
-    printf("%s", "        _____ _   _____    __ __ ______\n       / ___// | / /   |  / //_// ____/\n       \\__ \\/  |/ / /| | / ,<  / __/\n      ___/ / /|  / ___ |/ /| |/ /___\n     /____/_/ |_/_/  |_/_/ |_/_____/          Created by Fabio Codiglioni\n");
+    printf("        _____ _   _____    __ __ ______\n       / ___// | / /   |  / //_// ____/\n       \\__ \\/  |/ / /| | / ,<  / __/\n      ___/ / /|  / ___ |/ /| |/ /___\n     /____/_/ |_/_/  |_/_/ |_/_____/               v%s\n", VERSION);
+    puts("\nCreated by Fabio Codiglioni");
     fflush(stdout);
     sleep(2);
     clearScreen();
