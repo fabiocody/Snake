@@ -44,10 +44,11 @@ int main(int argc, const char *argv[]) {
     char direction;
     static struct termios oldt, newt;       // Structs to get all the keystrokes directly to stdin
     
-    FILE *recordFile = fopen("snake_record.bin", "r+b");
-    if (recordFile != NULL)
+    FILE *recordFile = fopen("~/snake_record.bin", "r+b");
+    if (recordFile != NULL) {
         fread(&record, sizeof(int), 1, recordFile);
-    fclose(recordFile);
+        fclose(recordFile);
+    }
     recordFile = NULL;
     
     srand((unsigned int)time(NULL));
@@ -89,10 +90,11 @@ int main(int argc, const char *argv[]) {
     puts("\n\nGAME OVER!\n");
     
     if (score > record) {
-        recordFile = fopen("snake_record.bin", "wb");
-        if (recordFile != NULL)
+        recordFile = fopen("~/snake_record.bin", "wb");
+        if (recordFile != NULL) {
             fwrite(&score, sizeof(int), 1, recordFile);
-        fclose(recordFile);
+            fclose(recordFile);
+        }
     }
     
     // Restore normal mode
