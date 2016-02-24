@@ -11,7 +11,7 @@
 #include <time.h>
 #include <termios.h>
 
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 #define HEIGHT 20
 #define WIDTH 40
 #define EMPTY 0
@@ -99,8 +99,9 @@ void clearScreen() {
 
 void splashScreen() {
     clearScreen();
-    printf("        _____ _   _____    __ __ ______\n       / ___// | / /   |  / //_// ____/\n       \\__ \\/  |/ / /| | / ,<  / __/\n      ___/ / /|  / ___ |/ /| |/ /___\n     /____/_/ |_/_/  |_/_/ |_/_____/               v%s\n", VERSION);
-    puts("\nCreated by Fabio Codiglioni");
+    //printf("        _____ _   _____    __ __ ______\n       / ___// | / /   |  / //_// ____/\n       \\__ \\/  |/ / /| | / ,<  / __/\n      ___/ / /|  / ___ |/ /| |/ /___\n     /____/_/ |_/_/  |_/_/ |_/_____/               v%s\n", VERSION);
+    //puts("\nCreated by Fabio Codiglioni");
+    printf("   _____ _   _          _  ________\n  / ____| \\ | |   /\\   | |/ /  ____|     \n | (___ |  \\| |  /  \\  | ' /| |__        \n  \\___ \\| . ` | / /\\ \\ |  < |  __|                                  ____\n  ____) | |\\  |/ ____ \\| . \\| |____        ________________________/ O  \\___/\n |_____/|_| \\_/_/    \\_\\_|\\_\\______|      <_/_\\_/_\\_/_\\_/_\\_/_\\_/_______/   \\        v%s", VERSION);
     fflush(stdout);
     sleep(2);
     clearScreen();
