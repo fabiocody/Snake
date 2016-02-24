@@ -3,7 +3,6 @@
 //  Snake
 //
 //  Created by Fabio Codiglioni on 23/02/16.
-//  Copyright © 2016 Fabio Codiglioni. All rights reserved.
 //
 
 #include <stdio.h>
@@ -19,12 +18,9 @@
 #define FOOD -1
 #define for_i for (i = 0; i < HEIGHT; i++)
 #define for_j for (j = 0; j < WIDTH; j++)
-#define fflush_stdin while ((getchar()) != '\n')
-
-//typedef struct {int row; int column;} pieceCoord_t;
 
 
-/*** VARIABLES ***/
+/*** GLOBAL VARIABLES ***/
 int grid[HEIGHT][WIDTH];
 
 
@@ -34,7 +30,6 @@ void splashScreen();
 void printGrid(int score);
 void generateFood();
 unsigned int turnSnake(char direction, unsigned int end, unsigned int *foodFlag);
-//pieceCoord_t searchPiece(int n);
 
 
 
@@ -48,8 +43,6 @@ int main(int argc, const char *argv[]) {
     int score = -1;
     char direction;
     static struct termios oldt, newt;       // Structs to get all the keystrokes directly to stdin
-    
-    //superMode;
     
     srand((unsigned int)time(NULL));
     
@@ -68,6 +61,7 @@ int main(int argc, const char *argv[]) {
     newt.c_lflag &= ~(ICANON);
     tcsetattr( STDIN_FILENO, TCSANOW, &newt);
     
+    // Game cycle
     while (end == 0) {
         if (foodFlag == 0) {
             generateFood();
