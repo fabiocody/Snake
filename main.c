@@ -10,8 +10,9 @@
 #include <unistd.h>
 #include <time.h>
 #include <termios.h>
+#include <poll.h>
 
-#define VERSION "1.1.0"
+#define VERSION "2.0.0"
 #define HEIGHT 20
 #define WIDTH 40
 #define EMPTY 0
@@ -40,9 +41,11 @@ int main(int argc, const char *argv[]) {
     unsigned int end = 0;
     unsigned int foodFlag = 0;
     unsigned int length = 1;
-    int score = -1, record = 0;
-    char direction;
+    int score = -1, record = 0, delay = 1000;
+    char direction, prevDirection = 'd';
+    long duration = 0;
     static struct termios oldt, newt;       // Structs to get all the keystrokes directly to stdin
+    struct pollfd mypoll = { STDIN_FILENO, POLLIN|POLLPRI };        // Struct to timeout getchar
     
     FILE *recordFile = fopen("snake_record.bin", "r+b");
     if (recordFile != NULL) {
@@ -78,13 +81,20 @@ int main(int argc, const char *argv[]) {
         clearScreen();
         printGrid(score, record);
         do {
-            direction = getchar();
+            if (poll(&mypoll, 1, delay))
+                direction = getchar();
+            else
+                direction = prevDirection;
         } while (direction != 'w' && direction != 'a' && direction != 's' && direction != 'd' && direction != 'q');
         if (direction == 'q') {
             puts("\n\nEXIT\n");
             exit(EXIT_SUCCESS);
         }
         end = turnSnake(direction, end, &foodFlag);
+        prevDirection = direction;
+        duration++;
+        if ((duration % 30) == 0 && delay > 200)
+            delay -= 50;
     }
 
     puts("\n\nGAME OVER!\n");
